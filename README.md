@@ -47,7 +47,7 @@ repos-TIVIT/
 O backend está configurado para aceitar requisições do frontend via política "AllowReact". O frontend se comunica com o backend usando axios apontando para http://backend:8001/api.
 
 ##  Desenvolvimento
-Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular persistência de dados. Essa abordagem também permitiu realizar o deploy da aplicação de forma mais leve e rápida, sem depender de uma infraestrutura externa de banco.
+Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular persistência de dados. Essa abordagem também permiti realizar o deploy da aplicação de forma mais leve e rápida, sem depender de uma infraestrutura externa de banco.
 
 ## 📸 Screenshots do Projeto
 
