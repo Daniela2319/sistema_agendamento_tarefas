@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./trilha-Api-TIVIT
+    container_name: tarefas-backend
+    ports:
+      - "8001:8080" # bate com EXPOSE do Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+    networks:
+      - tarefas-network
+
+  frontend:
+    build:
+      context: ./trilha-react-TIVIT
+      dockerfile: Dockerfile
+    container_name: tarefas-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - tarefas-network
+
+networks:
+  tarefas-network:
