@@ -52,12 +52,37 @@ Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facili
 ## 📸 Screenshots do Projeto
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/430f0f31-e017-4a69-942f-80f8ab585ba2" alt="Tela inicial do frontend" width="600" />
+  <img 
+    src="https://github.com/user-attachments/assets/430f0f31-e017-4a69-942f-80f8ab585ba2" 
+    alt="Layout do sistema de tarefas no frontend" 
+    width="800" 
+  />
+  <br />
+  <i>Layout do sistema de tarefas no frontend</i>
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/73123eeb-ed5d-4080-80bf-c0936cd0319c" alt="Swagger da API" width="600" />
+  <img 
+    src="https://github.com/user-attachments/assets/73123eeb-ed5d-4080-80bf-c0936cd0319c" 
+    alt="Documentação da API no Swagger" 
+    width="800" 
+  />
+  <br />
+  <i>Documentação da API gerada com Swagger</i>
 </p>
+
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/8054abb8-d919-4670-805f-e799dfa08b12" 
+    alt="Swagger realizando GET na lista de tarefas" 
+    width="800" 
+  />
+  <br />
+  <i>Endpoint GET no Swagger retornando a lista de tarefas</i>
+</p>
+
+
+
 
 
 ##  Autora
