@@ -49,6 +49,17 @@ O backend está configurado para aceitar requisições do frontend via política
 ##  Desenvolvimento
 Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular persistência de dados. Essa abordagem também permitiu realizar o deploy da aplicação de forma mais leve e rápida, sem depender de uma infraestrutura externa de banco.
 
+## 📸 Screenshots do Projeto
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/430f0f31-e017-4a69-942f-80f8ab585ba2" alt="Tela inicial do frontend" width="600" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/73123eeb-ed5d-4080-80bf-c0936cd0319c" alt="Swagger da API" width="600" />
+</p>
+
+
 ##  Autora
 Daniela Velter   
 Projeto desenvolvido como parte da trilha .NET da DIO em parceria com TIVIT.
