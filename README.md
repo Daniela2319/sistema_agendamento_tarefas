@@ -44,10 +44,11 @@ repos-TIVIT/
    git clone https://github.com/seu-usuario/tarefas-app.git
    cd tarefas-app
    ```
+
 ### 2. Suba os Serviços:
-    ```bash
     docker-compose up --build -d
-    ```
+    
+    
 Isso irá criar e iniciar:
 
  - tarefas-backend → API .NET 8
