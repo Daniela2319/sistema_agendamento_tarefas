@@ -41,8 +41,7 @@ repos-TIVIT/
 
 ### 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/tarefas-app.git
-   cd tarefas-app
+   git clone git@github.com:Daniela2319/sistema_agendamento_tarefas.git
    ```
 
 ### 2. Suba os Serviços:
