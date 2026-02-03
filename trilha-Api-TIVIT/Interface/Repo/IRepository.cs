@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace trilha_Api_TIVIT.Infra.Interface
+namespace trilha_Api_TIVIT.Interface.Repo
 {
     public interface IRepository <T>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace trilha_Api_TIVIT.Service.Interface
+namespace trilha_Api_TIVIT.Interface.Services
 {
     public interface IService<T>
     {
