@@ -9,7 +9,6 @@ Aplicação fullstack para gerenciamento de tarefas, desenvolvida com .NET 8 no 
 - Swagger (OpenAPI)
 - Entity Framework Core
 - Injeção de Dependência
-- CORS configurado para React
 - Migrations automatizada
 - Docker
 
@@ -73,8 +72,6 @@ Isso irá criar e iniciar:
 
    - Banco: `TarefasDB`
 
-##  CORS e Comunicação
-O backend está configurado para aceitar requisições do frontend via política "AllowReact". O frontend se comunica com o backend usando axios apontando para http://backend:8001/api.
 
 ##  Desenvolvimento
 Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular a persistência de dados de forma rápida e prática. Essa abordagem tornou o processo de desenvolvimento mais ágil e independente de infraestrutura externa.
