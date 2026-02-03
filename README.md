@@ -2,8 +2,6 @@
 ## Sistema de Agendamento Tarefa - Bootcamp DIO - TIVIT
 Aplicação fullstack para gerenciamento de tarefas, desenvolvida com .NET 8 no backend e React + Vite no frontend. Permite CRUD e buscas com tarefas de forma simples e eficiente.
 
-
-
 ##  Tecnologias Utilizadas
 
 ### Backend (.NET 8)
@@ -12,14 +10,21 @@ Aplicação fullstack para gerenciamento de tarefas, desenvolvida com .NET 8 no 
 - Entity Framework Core
 - Injeção de Dependência
 - CORS configurado para React
+- Migrations automatizada
 - Docker
 
 ### Frontend (React)
 - React + Vite
 - Axios para chamadas HTTP
 - Docker + Nginx
+  
+### Banco de Dados
+- Azure SQL Edge via Docker
 
-
+## Pré-requisitos
+- Docker Desktop instalado
+- Git instalado
+- Opcional: DBeaver ou Azure Data Studio para acessar o banco
 
 ##  Estrutura do Projeto
 
@@ -34,21 +39,47 @@ repos-TIVIT/
 
 ##  Como rodar localmente com Docker
 
-1. Clone o repositório:
+### 1. Clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/tarefas-app.git
    cd tarefas-app
    ```
-2. Suba os Serviços:
+### 2. Suba os Serviços:
     ```bash
     docker-compose up --build -d
     ```
+Isso irá criar e iniciar:
+
+ - tarefas-backend → API .NET 8
+
+ - tarefas-frontend → React
+
+ - tarefas-db → Azure SQL Edge
+
+### 3. Acessar os serviços
+- **Frontend (React):**
+`http://localhost:3000` (localhost in Bing)
+
+- **Backend (API .NET):**
+`http://localhost:8001/swagger` (localhost in Bing)
+
+- **Banco de dados (SQL Edge):**
+
+   - Host: `localhost,14330`
+
+   - Usuário: `SA`
+
+   - Senha: `SenhaForte123!`
+
+   - Banco: `TarefasDB`
+
 ##  CORS e Comunicação
 O backend está configurado para aceitar requisições do frontend via política "AllowReact". O frontend se comunica com o backend usando axios apontando para http://backend:8001/api.
 
 ##  Desenvolvimento
-Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular persistência de dados. Essa abordagem também permiti realizar o deploy da aplicação de forma mais leve e rápida, sem depender de uma infraestrutura externa de banco.
+Durante o desenvolvimento da API, utilizei o banco de dados InMemory para facilitar os testes e simular a persistência de dados de forma rápida e prática. Essa abordagem tornou o processo de desenvolvimento mais ágil e independente de infraestrutura externa.
 
+Agora, além do InMemory, a aplicação também está configurada para se conectar a um banco de dados real via Docker (Azure SQL Edge), garantindo maior flexibilidade: é possível testar cenários simples com InMemory ou validar a persistência completa utilizando o banco containerizado.
 ## 📸 Screenshots do Projeto
 
 <p align="center">
