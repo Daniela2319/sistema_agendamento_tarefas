@@ -1,11 +1,16 @@
-using trilha_Api_TIVIT.Infra.Interface;
-using trilha_Api_TIVIT.Infra.Repositories;
+
+using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Models;
-using trilha_Api_TIVIT.Service.Interface;
 
 namespace trilha_Api_TIVIT.Service
 {
-  public class GenericaService<T> : IService<T> where T : BaseModel
+    /// <summary>
+    /// Serviço genérico responsável por operações comuns de negócio
+    /// para entidades que herdam de BaseModel.
+    /// </summary>
+    /// <typeparam name="T">Tipo da entidade base do serviço</typeparam>
+    public class GenericaService<T> : IService<T> where T : BaseModel
   {
     private readonly IRepository<T> _repository;
 
@@ -22,10 +27,10 @@ namespace trilha_Api_TIVIT.Service
     {
       var entity = _repository.ReadById(id);
 
-            if (entity == null)
-                throw new Exception($"Registro {id} não encontrado.");
+        if (entity == null)
+            throw new Exception($"Registro {id} não encontrado.");
 
-            _repository.Delete(id);
+        _repository.Delete(id);
     }
 
     public bool Exists(int id)
@@ -42,20 +47,20 @@ namespace trilha_Api_TIVIT.Service
     {
        var entity = _repository.ReadById(id);
 
-            if (entity == null)
-                throw new Exception($"Registro ID {id} não encontrado.");
+        if (entity == null)
+            throw new Exception($"Registro ID {id} não encontrado.");
 
-            return entity;
+        return entity;
     }
 
     public void Update(T model)
     {
       var existing = _repository.ReadById(model.Id);
 
-            if (existing == null)
-                throw new Exception($"Registro {model.Id} não encontrado.");
+        if (existing == null)
+            throw new Exception($"Registro {model.Id} não encontrado.");
 
-            _repository.Update(model);
+        _repository.Update(model);
     }
   }
 }

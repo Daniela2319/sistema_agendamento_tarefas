@@ -1,4 +1,4 @@
-using trilha_Api_TIVIT.Infra.Interface;
+using trilha_Api_TIVIT.Interface.Repo;
 using trilha_Api_TIVIT.Models;
 
 namespace trilha_Api_TIVIT.Infra.Repositories
