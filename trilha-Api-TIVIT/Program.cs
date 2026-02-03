@@ -1,6 +1,8 @@
 
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using trilha_Api_TIVIT.Extensions;
+using trilha_Api_TIVIT.Infra.Context;
 using trilha_Api_TIVIT.Infra.Repositories;
 using trilha_Api_TIVIT.Interface.Repo;
 using trilha_Api_TIVIT.Models;
@@ -45,6 +47,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate(); // aplica migrations automaticamente
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
