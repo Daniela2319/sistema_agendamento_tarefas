@@ -1,7 +1,8 @@
-using Microsoft.OpenApi;
+
 using System.Text.Json.Serialization;
-using trilha_Api_TIVIT.Infra.Interface;
+using trilha_Api_TIVIT.Extensions;
 using trilha_Api_TIVIT.Infra.Repositories;
+using trilha_Api_TIVIT.Interface.Repo;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Service;
 
@@ -12,25 +13,26 @@ builder.Services.AddControllers() .AddJsonOptions(options =>
 { // Converte enums para string automaticamente 
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
 });
-// OpenAPI / Swagger
-//builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Tarefa.xml"));
-    c.SwaggerDoc("v1", new()
-    {
-        Title = "API de Tarefas",
-        Version = "v1",
-        Description = "API responsável por gerenciar tarefas (CRUD + buscas)",
-        Contact = new OpenApiContact
-        {
-            Name = "DVFWeb - Daniela",
-            Url = new Uri("https://www.linkedin.com/in/danielavelteredu/")
-        }
-    });
 
-    
-});
+builder.Services.AddSwaggerGen();
+
+// Carrega User Secrets em desenvolvimento
+if (builder.Environment.IsDevelopment()) 
+{ builder.Configuration.AddUserSecrets<Program>(); }
+
+// Chama a extensão para configurar o banco
+builder.Services.AddDatabaseConfiguration(builder.Configuration, builder.Environment);
+
+// Configuração do Swagger
+builder.Services.AddSwaggerDocumentation();
+builder.Services.AddControllers();
+
+// Authorization
+builder.Services.AddAuthorization();
+
+// REGISTRO DO SERVICE
+builder.Services.AddScoped<IRepository<Tarefa>, RepositoryTarefa>();
+builder.Services.AddScoped<TarefaService>();
 
 // Cors
 builder.Services.AddCors(options =>
@@ -41,14 +43,6 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
-
-// Authorization
-builder.Services.AddAuthorization();
-
-// REGISTRO DO SERVICE
-builder.Services.AddScoped<IRepository<Tarefa>, TarefaRepository>();
-builder.Services.AddScoped<TarefaService>();
-
 
 var app = builder.Build();
 
