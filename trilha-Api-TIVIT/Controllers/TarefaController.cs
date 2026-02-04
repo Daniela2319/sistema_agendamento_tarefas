@@ -7,9 +7,14 @@ namespace trilha_Api_TIVIT.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TarefaController(TarefaService tarefaService) : ControllerBase
+    public class TarefaController : ControllerBase
     {
-        private readonly TarefaService _tarefaService = tarefaService;
+        private readonly ServiceTarefa _tarefaService;
+
+        public TarefaController(ServiceTarefa serviceTarefa)
+        {
+            _tarefaService = serviceTarefa;
+        }
 
         /// <summary>
         /// Retorna todas as tarefas cadastradas.

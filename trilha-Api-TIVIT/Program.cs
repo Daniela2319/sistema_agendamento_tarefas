@@ -1,10 +1,11 @@
 
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using trilha_Api_TIVIT.Extensions;
 using trilha_Api_TIVIT.Infra.Context;
 using trilha_Api_TIVIT.Infra.Repositories;
 using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Service;
 
@@ -33,8 +34,13 @@ builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 
 // REGISTRO DO SERVICE
-builder.Services.AddScoped<IRepository<Tarefa>, RepositoryTarefa>();
-builder.Services.AddScoped<TarefaService>();
+builder.Services.AddScoped(typeof(IRepository<Tarefa>), typeof(RepositoryGeneric<Tarefa>));
+builder.Services.AddScoped(typeof(IRepository<Usuario>), typeof(RepositoryGeneric<Usuario>));
+builder.Services.AddScoped<ServiceTarefa>();
+builder.Services.AddScoped<ServiceUsuario>();
+
+
+
 
 // Cors
 builder.Services.AddCors(options =>
@@ -48,11 +54,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate(); // aplica migrations automaticamente
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate(); // aplica migrations automaticamente
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

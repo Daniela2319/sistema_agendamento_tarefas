@@ -10,11 +10,11 @@ namespace trilha_Api_TIVIT.Service
     /// para entidades que herdam de BaseModel.
     /// </summary>
     /// <typeparam name="T">Tipo da entidade base do serviço</typeparam>
-    public class GenericaService<T> : IService<T> where T : BaseModel
+    public class ServiceGeneric<T> : IService<T> where T : BaseModel
   {
     private readonly IRepository<T> _repository;
 
-    public GenericaService(IRepository<T> repository)
+    public ServiceGeneric(IRepository<T> repository)
     {
         _repository = repository;
     }
@@ -53,7 +53,7 @@ namespace trilha_Api_TIVIT.Service
         return entity;
     }
 
-    public void Update(T model)
+    public virtual void Update(T model)
     {
       var existing = _repository.ReadById(model.Id);
 

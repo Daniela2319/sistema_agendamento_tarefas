@@ -3,10 +3,21 @@ using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Models.Enum;
 namespace trilha_Api_TIVIT.Service
 {
-    public class TarefaService : GenericaService<Tarefa>
+    public class ServiceTarefa : ServiceGeneric<Tarefa>
     {
-        public TarefaService(IRepository<Tarefa> repository) : base(repository)
+        public ServiceTarefa(IRepository<Tarefa> repository) : base(repository)
         {
+        }
+
+        // update
+        public override void Update(Tarefa model)
+        {
+            var existingTarefa = ReadById(model.Id);
+            existingTarefa.Titulo = model.Titulo;
+            existingTarefa.Descricao = model.Descricao;
+            existingTarefa.Status = model.Status;
+
+            base.Update(existingTarefa);
         }
 
         // buscar por titulo
