@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Models.Enum;
@@ -7,6 +8,7 @@ namespace trilha_Api_TIVIT.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class TarefaController : ControllerBase
     {
         private readonly ServiceTarefa _tarefaService;

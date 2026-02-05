@@ -18,7 +18,7 @@ namespace trilha_Api_TIVIT.Service
     {
         _repository = repository;
     }
-    public int Create(T model)
+    public virtual int Create(T model)
     {
       return _repository.Create(model);
     }

@@ -7,10 +7,11 @@ namespace trilha_Api_TIVIT.Service
 {
     public class ServiceAuth
     {
-        // Injetar dependência necessárias, como repositorio e serviços de hashing de senha
+        // Injetar dependência necessárias, como repositorio e serviços de hash de senha
         private readonly RepositoryAuth _authRepository;
         private readonly PasswordHasher<Usuario> _passwordHasher;
         private readonly TokenGenerator _tokenGenerator;
+        
 
         public ServiceAuth(RepositoryAuth authRepository, PasswordHasher<Usuario> sha256PasswordHasher, TokenGenerator tokenGenerator)
         {
@@ -18,6 +19,22 @@ namespace trilha_Api_TIVIT.Service
             _passwordHasher = sha256PasswordHasher;
             _tokenGenerator = tokenGenerator;
             
+            
         }
+
+        // Login
+        public string Login(string email, string password)
+        {
+            var model = _authRepository.GetUserByEmail(email);
+            if (model == null)
+                throw new UnauthorizedAccessException("Usuário não encontrado.");
+
+            var result = _passwordHasher.HashPassword(model, password);
+                return _tokenGenerator.GenerateToken(model);
+        }
+
     }
 }
+            
+
+        

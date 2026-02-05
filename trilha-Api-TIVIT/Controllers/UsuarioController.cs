@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using trilha_Api_TIVIT.DTO.UsuarioDTO;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Service;
 
@@ -34,10 +35,17 @@ namespace trilha_Api_TIVIT.Controllers
 
         
         [HttpPost]
-        public IActionResult Post([FromBody] Usuario usuario)
+        public IActionResult Post([FromBody] UsuarioPostRequestDTO modelDTO)
         {
-            var id = _usuarioService.Create(usuario);
-            return CreatedAtAction(nameof(GetById), new { id = id }, usuario);
+            Usuario model = new Usuario
+            {
+                Nome = modelDTO.Nome,
+                Email = modelDTO.Email,
+                Password = modelDTO.Password,
+            };
+
+            var id = _usuarioService.Create(model);
+            return CreatedAtAction(nameof(GetById), new { id = id }, model);
         }
 
         
