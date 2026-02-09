@@ -3,7 +3,6 @@ using trilha_Api_TIVIT.DTO.UsuarioDTO;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Service;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace trilha_Api_TIVIT.Controllers
 {
@@ -21,8 +20,19 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var user = _usuarioService.Read();
-            return Ok(user);
+            List<Usuario> usuarios = _usuarioService.Read();
+            List<UsuarioGetResponseDTO> listDto = new List<UsuarioGetResponseDTO>();
+            foreach (Usuario user in usuarios)
+            {
+                listDto.Add(new UsuarioGetResponseDTO
+                {
+                    Id = user.Id,
+                    Nome = user.Nome,
+                    Email = user.Email
+
+                });
+            }
+            return Ok(listDto);
         }
 
         
@@ -33,7 +43,6 @@ namespace trilha_Api_TIVIT.Controllers
             return Ok(user);
         }
 
-        
         [HttpPost]
         public IActionResult Post([FromBody] UsuarioPostRequestDTO modelDTO)
         {
@@ -48,15 +57,19 @@ namespace trilha_Api_TIVIT.Controllers
             return CreatedAtAction(nameof(GetById), new { id = id }, model);
         }
 
-        
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        public IActionResult Put(int id, [FromBody] UsuarioPutRequestDTO request)
         {
-            _usuarioService.Update(usuario);
-            return Ok();
+            Usuario model = new Usuario
+            {
+                Id = request.Id,
+                Password = request.Password
+
+            };
+              _usuarioService.Update(model);
+              return NoContent();
         }
 
-        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
