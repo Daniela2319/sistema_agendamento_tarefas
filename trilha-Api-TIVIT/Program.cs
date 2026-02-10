@@ -1,20 +1,21 @@
 
+using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 using trilha_Api_TIVIT.Extensions;
-using trilha_Api_TIVIT.Infra.Context;
 using trilha_Api_TIVIT.Infra.Repositories;
 using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Middlewares;
 using trilha_Api_TIVIT.Models;
+using trilha_Api_TIVIT.Security;
 using trilha_Api_TIVIT.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddControllers() .AddJsonOptions(options => 
-{ // Converte enums para string automaticamente 
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
-});
+builder.Services.AddControllers() 
+    .AddJsonOptions(options => 
+    { // Converte enums para string automaticamente 
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
+    });
 
 builder.Services.AddSwaggerGen();
 
@@ -25,16 +26,26 @@ if (builder.Environment.IsDevelopment())
 // Chama a extensão para configurar o banco
 builder.Services.AddDatabaseConfiguration(builder.Configuration, builder.Environment);
 
+// Autentificação JWT
+builder.Services.AddAuthenticationConfiguration(builder.Configuration);
+
 // Configuração do Swagger
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddControllers();
+
 
 // Authorization
 builder.Services.AddAuthorization();
 
 // REGISTRO DO SERVICE
-builder.Services.AddScoped<IRepository<Tarefa>, RepositoryTarefa>();
-builder.Services.AddScoped<TarefaService>();
+builder.Services.AddScoped(typeof(IRepository<Tarefa>), typeof(RepositoryGeneric<Tarefa>));
+builder.Services.AddScoped(typeof(IRepository<Usuario>), typeof(RepositoryGeneric<Usuario>));
+builder.Services.AddScoped<RepositoryAuth>();
+builder.Services.AddScoped<ServiceTarefa>();
+builder.Services.AddScoped<ServiceUsuario>();
+builder.Services.AddScoped<ServiceAuth>();
+builder.Services.AddScoped<TokenGenerator, TokenGenerator>();
+builder.Services.AddScoped<PasswordHasher<Usuario>>();
 
 // Cors
 builder.Services.AddCors(options =>
@@ -48,11 +59,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate(); // aplica migrations automaticamente
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate(); // aplica migrations automaticamente
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -61,7 +72,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

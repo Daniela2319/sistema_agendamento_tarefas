@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace trilha_Api_TIVIT.Extensions
 {
@@ -19,6 +20,33 @@ namespace trilha_Api_TIVIT.Extensions
                         Url = new Uri("https://www.linkedin.com/in/danielavelteredu/")
                     }
                 });
+
+                // Esquema JWT Bearer
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Digite: Bearer {seu_token}",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer", // IMPORTANTE
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                c.AddSecurityDefinition("Bearer", securityScheme);
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        securityScheme, new string[] { }
+                    }
+                };
+
+                c.AddSecurityRequirement(securityRequirement);
             });
             return services;
         }

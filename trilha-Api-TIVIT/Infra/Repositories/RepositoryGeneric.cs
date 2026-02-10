@@ -47,7 +47,8 @@ namespace trilha_Api_TIVIT.Infra.Repositories
 
         public void Update(T entity)
         {
-            _dbSet.Update(entity);
+            var modelOriginal = ReadById(entity.Id);
+            _context.Entry(modelOriginal).CurrentValues.SetValues(entity);
             _context.SaveChanges();
         }
     }
