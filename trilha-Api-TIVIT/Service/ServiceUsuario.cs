@@ -14,6 +14,9 @@ namespace trilha_Api_TIVIT.Service
 
         public override int Create(Usuario model)
         {
+            if (model.Password.Length < 3)
+                throw new ArgumentException("A senha deve ter no mínimo 3 caracteres.");
+
             model.Password = _passwordHasher.HashPassword(model, model.Password);
             return base.Create(model);
         }

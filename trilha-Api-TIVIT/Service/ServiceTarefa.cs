@@ -23,8 +23,9 @@ namespace trilha_Api_TIVIT.Service
         // buscar por titulo
         public List<Tarefa> BuscarPorTitulo(string titulo)
         {
-            if (string.IsNullOrWhiteSpace(titulo)) 
-            return new List<Tarefa>(); 
+            if (string.IsNullOrWhiteSpace(titulo))
+                throw new ArgumentException("Título para busca não pode ser vazio.");
+
             return Read() 
             .Where(t => t.Titulo.Contains(titulo, StringComparison.OrdinalIgnoreCase)) 
             .ToList();
@@ -33,6 +34,9 @@ namespace trilha_Api_TIVIT.Service
         // buscar por Data de Criação
         public List<Tarefa> BuscarPorDataCriacao(DateTime dataCriacao)
         {
+            if (dataCriacao == default)
+                throw new ArgumentException("Data de criação inválida.");
+
             var todasTarefas = Read();
             return todasTarefas.Where(t => t.DataCriacao.Date == dataCriacao.Date).ToList();
         }
@@ -40,6 +44,9 @@ namespace trilha_Api_TIVIT.Service
         // buscar por Status
         public List<Tarefa> BuscarPorStatus(EnumStatusTarefa status)
         {
+            if (!Enum.IsDefined(typeof(EnumStatusTarefa), status))
+                throw new ArgumentException("Status inválido.");
+
             var todasTarefas = Read();
             return todasTarefas.Where(t => t.Status == status).ToList();
         }

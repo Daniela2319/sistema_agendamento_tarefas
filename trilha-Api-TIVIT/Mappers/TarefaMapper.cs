@@ -14,7 +14,7 @@ namespace trilha_Api_TIVIT.Mappers
                 Titulo = model.Titulo,
                 Descricao = model.Descricao,
                 DataCriacao = model.DataCriacao,
-                Status = model.Status,
+                Status = model.Status 
             };
         }
 
@@ -31,7 +31,17 @@ namespace trilha_Api_TIVIT.Mappers
             {
                 Titulo = request.Titulo,
                 Descricao = request.Descricao,
+                
             };
+        }
+
+        // Put
+        public static void ToModelPut(Tarefa tarefa, TarefaPutRequestDTO dto)
+        {
+            tarefa.Id = dto.Id;
+            tarefa.Titulo = dto.Titulo;
+            tarefa.Descricao = dto.Descricao;
+            tarefa.Status = dto.Status;
         }
     }
 }

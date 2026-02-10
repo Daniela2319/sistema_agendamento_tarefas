@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using trilha_Api_TIVIT.Extensions;
 using trilha_Api_TIVIT.Infra.Repositories;
 using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Middlewares;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Security;
 using trilha_Api_TIVIT.Service;
@@ -31,6 +32,7 @@ builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 // Configuração do Swagger
 builder.Services.AddSwaggerDocumentation();
 builder.Services.AddControllers();
+
 
 // Authorization
 builder.Services.AddAuthorization();
@@ -69,6 +71,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

@@ -1,4 +1,6 @@
-﻿namespace trilha_Api_TIVIT.DTO.TarefasDTO
+﻿using trilha_Api_TIVIT.Models.Enum;
+
+namespace trilha_Api_TIVIT.DTO.TarefasDTO
 {
     public class TarefaGetResponseDTO : BaseDTO
     {
@@ -7,8 +9,6 @@
 
         public string Descricao { get; set; } = string.Empty;
 
-        public DateTime DataCriacao { get; set; }
-
-        public Enum Status { get; set; } 
+        public EnumStatusTarefa Status { get; set; } 
     }
 }
