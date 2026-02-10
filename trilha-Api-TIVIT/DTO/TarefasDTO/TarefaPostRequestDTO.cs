@@ -11,5 +11,6 @@ namespace trilha_Api_TIVIT.DTO.TarefasDTO
         [Required(ErrorMessage = "A descrição é obrigatória.")]
         [StringLength(500, MinimumLength = 5, ErrorMessage = "A descrição deve ter entre 5 e 500 caracteres.")]
         public string Descricao { get; set; } = string.Empty;
+        
     }
 }

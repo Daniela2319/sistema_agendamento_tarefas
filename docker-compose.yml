@@ -1,22 +1,25 @@
 version: "3.8"
+
 services:
   backend:
     build: ./trilha-Api-TIVIT
     container_name: tarefas-backend
     ports:
-      - "8001:8080" # bate com EXPOSE do Dockerfile
+      - "8001:8080"
     environment:
       - DOTNET_ENVIRONMENT=Development
-      - ConnectionStrings__LocalConnection=Server=db;Database=TarefasDB;User Id=SA;Password=SenhaForte123!;Encrypt=False;
+      - ConnectionStrings__LocalConnection=Server=tarefas-db,1433;Database=TarefasDb;User Id=sa;Password=SenhaForte123!;TrustServerCertificate=True;
+      - TokenConfigurations__Audience=tarefas-api
+      - TokenConfigurations__Issuer=tarefas-api
+      - TokenConfigurations__Secret=chave-super-secreta-para-jwt-123456
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - tarefas-network
 
   frontend:
-    build:
-      context: ./trilha-react-TIVIT
-      dockerfile: Dockerfile
+    build: ./trilha-react-TIVIT
     container_name: tarefas-frontend
     ports:
       - "3000:80"
@@ -33,8 +36,30 @@ services:
       - SA_PASSWORD=SenhaForte123!
     ports:
       - "14330:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/opt/mssql-tools/bin/sqlcmd",
+          "-S",
+          "localhost",
+          "-U",
+          "sa",
+          "-P",
+          "SenhaForte123!",
+          "-Q",
+          "SELECT 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - tarefas-network
+
+volumes:
+  sql_data:
 
 networks:
   tarefas-network:

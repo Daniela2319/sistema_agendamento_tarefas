@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using trilha_Api_TIVIT.DTO.TarefasDTO;
 using trilha_Api_TIVIT.Mappers;
-using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Models.Enum;
 using trilha_Api_TIVIT.Service;
 
@@ -26,9 +25,8 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var tarefa = _tarefaService.Read();
-            List<Tarefa> Tarefas = new List<Tarefa>();
-            var response = TarefaMapper.ToResponseList(Tarefas);
+            var tarefas = _tarefaService.Read();
+            var response = TarefaMapper.ToResponseList(tarefas);
             
             return Ok(response);
         }
@@ -40,37 +38,20 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            try
-            {
-                Tarefa model = _tarefaService.ReadById(id);
-                var response = new TarefaGetResponseDTO
-                {
-                    Id = model.Id,
-                    Titulo = model.Titulo,
-                    Descricao = model.Descricao,
-                    DataCriacao = model.DataCriacao,
-                    Status = model.Status,
-                };
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var tarefa = _tarefaService.ReadById(id);
+            var response = TarefaMapper.ToResponse(tarefa);
+            return Ok(response);
+          
         }
 
         /// <summary>
         /// Cria uma nova tarefa.
         /// </summary>
-        /// <param name="tarefa">Objeto tarefa enviado no corpo da requisição</param>
+        /// <param name="request">Objeto tarefa enviado no corpo da requisição</param>
         [HttpPost]
         public IActionResult Post([FromBody] TarefaPostRequestDTO request)
         {
-            Tarefa model = new Tarefa
-            {
-                Titulo = request.Titulo,
-                Descricao = request.Descricao,
-            };
+            var model = TarefaMapper.ToModel(request);
             _tarefaService.Create(model);
             return Created();
         }
@@ -82,16 +63,9 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet("buscarPorTitulo")]
         public IActionResult BuscarPorTitulo(string titulo)
         {
-            try
-            {
-
-                var tarefas = _tarefaService.BuscarPorTitulo(titulo);
-                return Ok(tarefas);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+           var tarefas = _tarefaService.BuscarPorTitulo(titulo);
+            var response = TarefaMapper.ToResponseList(tarefas);
+            return Ok(response);
         }
 
         /// <summary>
@@ -101,16 +75,9 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet("buscarPorDataCriacao")]
         public IActionResult BuscarPorDataCriacao(DateTime dataCriacao)
         {
-            try
-            {
-                var tarefas = _tarefaService.BuscarPorDataCriacao(dataCriacao);
-                return Ok(tarefas);
-
-            }
-            catch (Exception ex) 
-            {
-                return NotFound(ex.Message);
-            }
+            var tarefas = _tarefaService.BuscarPorDataCriacao(dataCriacao);
+             var response = TarefaMapper.ToResponseList(tarefas);
+            return Ok(response);
         }
 
         /// <summary>
@@ -120,42 +87,30 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpGet("buscarPorStatus")]
         public IActionResult BuscarPorStatus(EnumStatusTarefa status)
         {
-            try
-            {
-                var tarefas = _tarefaService.BuscarPorStatus(status);
-                return Ok(tarefas);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+           var tarefas = _tarefaService.BuscarPorStatus(status);
+            var response = TarefaMapper.ToResponseList(tarefas);
+            return Ok(response);
         }
 
         /// <summary>
         /// Atualiza uma tarefa existente.
         /// </summary>
         /// <param name="id">ID da tarefa</param>
-        /// <param name="tarefa">Objeto tarefa atualizado</param>
+        /// <param name="request">Objeto tarefa atualizado</param>
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] TarefaPostRequestDTO request)
+        public IActionResult Put(int id, TarefaPutRequestDTO request)
         {
-            try
-            {
-                Tarefa model = new Tarefa
-                {
-                    Id = id,
-                    Titulo = request.Titulo,
-                    Descricao = request.Descricao,
+            var tarefa = _tarefaService.ReadById(id);
 
-                };
-                _tarefaService.Update(model);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            if (tarefa == null)
+                return NotFound("Tarefa não encontrada");
+
+            // Mapper atualiza o model
+            TarefaMapper.ToModelPut(tarefa, request);
+
+            _tarefaService.Update(tarefa);
+
+            return Ok(TarefaMapper.ToResponse(tarefa));
         }
 
         /// <summary>
@@ -165,15 +120,9 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                _tarefaService.Delete(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            _tarefaService.Delete(id);
+            return NoContent();
+            
         }
 
         [HttpPatch("{id}/finalizar")]

@@ -5,7 +5,6 @@ namespace trilha_Api_TIVIT.Models
     {
         public string Titulo { get; set; } = string.Empty;
         public string Descricao { get; set; } = string.Empty;
-        public DateTime DataCriacao { get; set; }
         public EnumStatusTarefa Status { get; set; }
     }
 }
