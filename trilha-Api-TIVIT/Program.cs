@@ -1,7 +1,9 @@
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using trilha_Api_TIVIT.Extensions;
+using trilha_Api_TIVIT.Infra.Context;
 using trilha_Api_TIVIT.Infra.Repositories;
 using trilha_Api_TIVIT.Interface.Repo;
 using trilha_Api_TIVIT.Middlewares;
@@ -31,7 +33,8 @@ builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 
 // Configuração do Swagger
 builder.Services.AddSwaggerDocumentation();
-builder.Services.AddControllers();
+
+
 
 
 // Authorization
@@ -59,11 +62,22 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//    db.Database.Migrate(); // aplica migrations automaticamente
-//}
+// Aplica as migrations automaticamente ao iniciar a aplicação
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    try
+    {
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro ao aplicar migrations: {ex.Message}");
+        throw;
+    }
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -76,11 +90,11 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowReact");
+
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.UseCors("AllowReact");
 
 app.MapControllers();
 
