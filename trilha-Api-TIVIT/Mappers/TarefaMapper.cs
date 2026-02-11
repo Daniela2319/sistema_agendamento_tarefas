@@ -1,12 +1,13 @@
 ﻿using trilha_Api_TIVIT.DTO.TarefasDTO;
+using trilha_Api_TIVIT.Interface.IMapper;
 using trilha_Api_TIVIT.Models;
 
 namespace trilha_Api_TIVIT.Mappers
 {
-    public static class TarefaMapper
+    public class TarefaMapper : ITarefaMapper
     {
         // Model => DTO (resposta)
-        public static TarefaGetResponseDTO ToResponse(Tarefa model)
+        public TarefaGetResponseDTO ToResponse(Tarefa model)
         {
             return new TarefaGetResponseDTO
             {
@@ -19,13 +20,13 @@ namespace trilha_Api_TIVIT.Mappers
         }
 
         // Model → DTO (lista)
-        public static List<TarefaGetResponseDTO> ToResponseList(List<Tarefa> tarefas)
+        public List<TarefaGetResponseDTO> ToResponseList(List<Tarefa> tarefas)
         {
             return tarefas.Select(ToResponse).ToList();
         }
 
         // DTO => Model (entrada ou pergunta request)
-        public static Tarefa ToModel(TarefaPostRequestDTO request)
+        public Tarefa ToModel(TarefaPostRequestDTO request)
         {
             return new Tarefa
             {
@@ -36,7 +37,7 @@ namespace trilha_Api_TIVIT.Mappers
         }
 
         // Put
-        public static void ToModelPut(Tarefa tarefa, TarefaPutRequestDTO dto)
+        public void ToModelPut(Tarefa tarefa, TarefaPutRequestDTO dto)
         {
             tarefa.Id = dto.Id;
             tarefa.Titulo = dto.Titulo;

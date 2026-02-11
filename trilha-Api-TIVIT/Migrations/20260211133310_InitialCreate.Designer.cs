@@ -12,8 +12,8 @@ using trilha_Api_TIVIT.Infra.Context;
 namespace trilha_Api_TIVIT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260210133611_UpdateTarefaBaseModel")]
-    partial class UpdateTarefaBaseModel
+    [Migration("20260211133310_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

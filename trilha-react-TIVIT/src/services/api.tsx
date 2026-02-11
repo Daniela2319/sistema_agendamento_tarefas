@@ -2,7 +2,7 @@ import axios from "axios";
 import { type Tarefa, StatusTarefa } from "../types/Tarefas";
 
 const api = axios.create({
-  baseURL: "http://localhost:8001/api",
+  baseURL: "https://localhost:7181/api",
 });
 
 export const tarefaService = {

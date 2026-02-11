@@ -35,11 +35,6 @@ namespace trilha_Api_TIVIT.Service
         _repository.Delete(id);
     }
 
-    public bool Exists(int id)
-    {
-      return _repository.Exists(id);
-    }
-
     public List<T> Read()
     {
       return _repository.Read();

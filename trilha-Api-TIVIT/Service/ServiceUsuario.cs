@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Models;
 
 namespace trilha_Api_TIVIT.Service
 {
-    public class ServiceUsuario : ServiceGeneric<Usuario>
+    public class ServiceUsuario : ServiceGeneric<Usuario>, IUsuarioService
     {
         private readonly PasswordHasher<Usuario> _passwordHasher;
         public ServiceUsuario(IRepository<Usuario> repository, PasswordHasher<Usuario> passwordHasher) : base(repository)

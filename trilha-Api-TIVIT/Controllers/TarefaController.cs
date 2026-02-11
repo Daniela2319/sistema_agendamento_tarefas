@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using trilha_Api_TIVIT.DTO.TarefasDTO;
-using trilha_Api_TIVIT.Mappers;
+using trilha_Api_TIVIT.Interface.IMapper;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Models.Enum;
-using trilha_Api_TIVIT.Service;
+
 
 namespace trilha_Api_TIVIT.Controllers
 {
@@ -12,11 +13,13 @@ namespace trilha_Api_TIVIT.Controllers
     [Authorize(Roles = "Admin")]
     public class TarefaController : ControllerBase
     {
-        private readonly ServiceTarefa _tarefaService;
+        private readonly ITarefaService _tarefaService;
+        private readonly ITarefaMapper _tarefaMapper;
 
-        public TarefaController(ServiceTarefa serviceTarefa)
+        public TarefaController(ITarefaService tarefaService, ITarefaMapper tarefaMapper)
         {
-            _tarefaService = serviceTarefa;
+            _tarefaService = tarefaService;
+            _tarefaMapper = tarefaMapper;
         }
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult Get()
         {
             var tarefas = _tarefaService.Read();
-            var response = TarefaMapper.ToResponseList(tarefas);
+            var response = _tarefaMapper.ToResponseList(tarefas);
             
             return Ok(response);
         }
@@ -39,7 +42,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult GetById(int id)
         {
             var tarefa = _tarefaService.ReadById(id);
-            var response = TarefaMapper.ToResponse(tarefa);
+            var response = _tarefaMapper.ToResponse(tarefa);
             return Ok(response);
           
         }
@@ -51,7 +54,7 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] TarefaPostRequestDTO request)
         {
-            var model = TarefaMapper.ToModel(request);
+            var model = _tarefaMapper.ToModel(request);
             _tarefaService.Create(model);
             return Created();
         }
@@ -64,7 +67,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult BuscarPorTitulo(string titulo)
         {
            var tarefas = _tarefaService.BuscarPorTitulo(titulo);
-            var response = TarefaMapper.ToResponseList(tarefas);
+            var response = _tarefaMapper.ToResponseList(tarefas);
             return Ok(response);
         }
 
@@ -76,7 +79,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult BuscarPorDataCriacao(DateTime dataCriacao)
         {
             var tarefas = _tarefaService.BuscarPorDataCriacao(dataCriacao);
-             var response = TarefaMapper.ToResponseList(tarefas);
+             var response = _tarefaMapper.ToResponseList(tarefas);
             return Ok(response);
         }
 
@@ -88,7 +91,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult BuscarPorStatus(EnumStatusTarefa status)
         {
            var tarefas = _tarefaService.BuscarPorStatus(status);
-            var response = TarefaMapper.ToResponseList(tarefas);
+            var response = _tarefaMapper.ToResponseList(tarefas);
             return Ok(response);
         }
 
@@ -106,11 +109,11 @@ namespace trilha_Api_TIVIT.Controllers
                 return NotFound("Tarefa não encontrada");
 
             // Mapper atualiza o model
-            TarefaMapper.ToModelPut(tarefa, request);
+            _tarefaMapper.ToModelPut(tarefa, request);
 
             _tarefaService.Update(tarefa);
 
-            return Ok(TarefaMapper.ToResponse(tarefa));
+            return Ok(_tarefaMapper.ToResponse(tarefa));
         }
 
         /// <summary>
@@ -120,28 +123,25 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _tarefaService.Delete(id);
-            return NoContent();
-            
-        }
-
-        [HttpPatch("{id}/finalizar")]
-        public IActionResult Finalizar(int id)
-        {  
             try
             {
-                var tarefa = _tarefaService.ReadById(id);
-                if (tarefa == null) return NotFound();
-                tarefa.Status = EnumStatusTarefa.Finalizado;
-                _tarefaService.Update(tarefa);
-                return Ok(tarefa);
-
+                _tarefaService.Delete(id);
+                return NoContent();
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); 
+                return NotFound(ex.Message);
             }
         }
+
+        
+        [HttpPatch("{id}/finalizar")]
+        public IActionResult Finalizar(int id)
+        {
+            _tarefaService.Finalizar(id);
+            return NoContent();
+        }
+
 
     }
 }

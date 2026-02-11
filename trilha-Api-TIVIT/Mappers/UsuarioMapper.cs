@@ -1,12 +1,13 @@
 ﻿using trilha_Api_TIVIT.DTO.TarefasDTO;
 using trilha_Api_TIVIT.DTO.UsuarioDTO;
+using trilha_Api_TIVIT.Interface.IMapper;
 using trilha_Api_TIVIT.Models;
 
 namespace trilha_Api_TIVIT.Mappers
 {
-    public static class UsuarioMapper
+    public class UsuarioMapper : IUsuarioMapper
     {
-        public static UsuarioGetResponseDTO ToResponse(Usuario usuario)
+        public UsuarioGetResponseDTO ToResponse(Usuario usuario)
         {
             return new UsuarioGetResponseDTO
             {
@@ -16,12 +17,12 @@ namespace trilha_Api_TIVIT.Mappers
             };
         }
 
-        public static List<UsuarioGetResponseDTO> ToResponseList(List<Usuario> usuarioList)
+        public List<UsuarioGetResponseDTO> ToResponseList(List<Usuario> usuarioList)
         {
             return usuarioList.Select(ToResponse).ToList();
         }
 
-        public static Usuario ToModel(UsuarioPostRequestDTO request)
+        public Usuario ToModel(UsuarioPostRequestDTO request)
         {
             return new Usuario
             {
@@ -33,7 +34,7 @@ namespace trilha_Api_TIVIT.Mappers
         }
 
         // Put
-        public static void ToModelPut(Usuario usuario, UsuarioPutRequestDTO dto)
+        public void ToModelPut(Usuario usuario, UsuarioPutRequestDTO dto)
         {
             usuario.Id = dto.Id;
             usuario.Password = dto.Password;
