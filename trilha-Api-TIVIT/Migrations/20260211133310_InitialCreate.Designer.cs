@@ -12,7 +12,7 @@ using trilha_Api_TIVIT.Infra.Context;
 namespace trilha_Api_TIVIT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260202190758_InitialCreate")]
+    [Migration("20260211133310_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,6 +59,9 @@ namespace trilha_Api_TIVIT.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
