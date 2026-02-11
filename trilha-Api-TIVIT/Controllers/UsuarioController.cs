@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using trilha_Api_TIVIT.DTO.UsuarioDTO;
+using trilha_Api_TIVIT.Interface.IMapper;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Mappers;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Service;
@@ -13,15 +15,18 @@ namespace trilha_Api_TIVIT.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly ServiceUsuario _usuarioService;
+        private readonly IUsuarioService _usuarioService;
+        private readonly IUsuarioMapper _usuarioMapper;
 
         /// <summary>
         /// Construtor da controller de usuário.
         /// </summary>
         /// <param name="usuarioService">Serviço de regras de negócio do usuário</param>
-        public UsuarioController(ServiceUsuario usuarioService)
+        /// <param name="usuarioMapper"></param>
+        public UsuarioController(IUsuarioService usuarioService, IUsuarioMapper usuarioMapper)
         {
             _usuarioService = usuarioService;
+            _usuarioMapper = usuarioMapper;
         }
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult Get()
         {
             var usuarios = _usuarioService.Read();
-            var response = UsuarioMapper.ToResponseList(usuarios);
+            var response = _usuarioMapper.ToResponseList(usuarios);
             return Ok(response);
         }
 
@@ -45,7 +50,7 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult GetById(int id)
         {
             Usuario usuario = _usuarioService.ReadById(id);
-            var response = UsuarioMapper.ToResponse(usuario);
+            var response = _usuarioMapper.ToResponse(usuario);
             return Ok(response);
         }
 
@@ -58,9 +63,9 @@ namespace trilha_Api_TIVIT.Controllers
         public IActionResult Post([FromBody] UsuarioPostRequestDTO request)
         {
            
-            var model = UsuarioMapper.ToModel(request);
+            var model = _usuarioMapper.ToModel(request);
             var id = _usuarioService.Create(model);
-            return CreatedAtAction(nameof(GetById), new { id = id }, UsuarioMapper.ToResponse(model));
+            return CreatedAtAction(nameof(GetById), new { id = id }, _usuarioMapper.ToResponse(model));
         }
 
         /// <summary>
@@ -74,7 +79,7 @@ namespace trilha_Api_TIVIT.Controllers
         {
             var usuario = _usuarioService.ReadById(id);
 
-            UsuarioMapper.ToModelPut(usuario, request);
+            _usuarioMapper.ToModelPut(usuario, request);
               _usuarioService.Update(usuario);
               return NoContent();
         }
@@ -87,9 +92,16 @@ namespace trilha_Api_TIVIT.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _usuarioService.Delete(id);
-            return NoContent();
-              
+            try
+            {
+                _usuarioService.Delete(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
     }
 }

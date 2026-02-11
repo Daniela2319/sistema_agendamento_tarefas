@@ -11,8 +11,13 @@ namespace trilha_Api_TIVIT.Extensions
 
             if (environment.IsDevelopment())
             {
-                // Local - Azure SQL Edge
+                // Ambiente local (user-secrets ou appsettings)
                 connectionString = configuration.GetConnectionString("LocalConnection");
+            }
+            else if (environment.IsEnvironment("Docker"))
+            {
+                // Ambiente Docker
+                connectionString = configuration.GetConnectionString("DockerConnection");
             }
             else
             {

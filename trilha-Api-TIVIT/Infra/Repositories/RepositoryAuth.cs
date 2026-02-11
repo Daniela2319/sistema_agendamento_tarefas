@@ -1,9 +1,11 @@
 ﻿using trilha_Api_TIVIT.Infra.Context;
+using trilha_Api_TIVIT.Interface.Repo;
 using trilha_Api_TIVIT.Models;
 
 namespace trilha_Api_TIVIT.Infra.Repositories
 {
-    public class RepositoryAuth
+    public class RepositoryAuth : IRepositoryAuth
+
     {
         private readonly ApplicationDbContext _context;
 

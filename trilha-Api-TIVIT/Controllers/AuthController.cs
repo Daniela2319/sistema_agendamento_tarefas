@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using trilha_Api_TIVIT.DTO.LoginDTO;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Service;
 
 namespace trilha_Api_TIVIT.Controllers
@@ -12,13 +13,13 @@ namespace trilha_Api_TIVIT.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly ServiceAuth _authService;
+        private readonly IServiceAuth _authService;
 
         /// <summary>
         /// Construtor da controller de autenticação.
         /// </summary>
         /// <param name="authService">Serviço de autenticação</param>
-        public AuthController(ServiceAuth authService)
+        public AuthController(IServiceAuth authService)
         {
             _authService = authService;
         }

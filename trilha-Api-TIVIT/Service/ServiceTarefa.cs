@@ -1,12 +1,15 @@
 using trilha_Api_TIVIT.Interface.Repo;
+using trilha_Api_TIVIT.Interface.Services;
 using trilha_Api_TIVIT.Models;
 using trilha_Api_TIVIT.Models.Enum;
 namespace trilha_Api_TIVIT.Service
 {
-    public class ServiceTarefa : ServiceGeneric<Tarefa>
+    public class ServiceTarefa : ServiceGeneric<Tarefa>, ITarefaService
     {
+        private readonly IRepository<Tarefa> _repository;
         public ServiceTarefa(IRepository<Tarefa> repository) : base(repository)
         {
+            _repository = repository;
         }
 
         // update
@@ -22,33 +25,29 @@ namespace trilha_Api_TIVIT.Service
 
         // buscar por titulo
         public List<Tarefa> BuscarPorTitulo(string titulo)
-        {
-            if (string.IsNullOrWhiteSpace(titulo))
-                throw new ArgumentException("Título para busca não pode ser vazio.");
-
-            return Read() 
-            .Where(t => t.Titulo.Contains(titulo, StringComparison.OrdinalIgnoreCase)) 
-            .ToList();
-        }
+            => _repository.Read().Where(t => t.Titulo.Contains(titulo)).ToList();
+        
 
         // buscar por Data de Criação
         public List<Tarefa> BuscarPorDataCriacao(DateTime dataCriacao)
-        {
-            if (dataCriacao == default)
-                throw new ArgumentException("Data de criação inválida.");
+            => _repository.Read().Where(t => t.DataCriacao.Date == dataCriacao.Date).ToList();
 
-            var todasTarefas = Read();
-            return todasTarefas.Where(t => t.DataCriacao.Date == dataCriacao.Date).ToList();
-        }
 
         // buscar por Status
         public List<Tarefa> BuscarPorStatus(EnumStatusTarefa status)
-        {
-            if (!Enum.IsDefined(typeof(EnumStatusTarefa), status))
-                throw new ArgumentException("Status inválido.");
+            => _repository.Read().Where(t => t.Status == status).ToList();
 
-            var todasTarefas = Read();
-            return todasTarefas.Where(t => t.Status == status).ToList();
+        public void Finalizar(int id)
+        {
+            var tarefa = ReadById(id); 
+
+            if (tarefa.Status == EnumStatusTarefa.Finalizado)
+                throw new InvalidOperationException("Tarefa já está finalizada.");
+
+            tarefa.Status = EnumStatusTarefa.Finalizado;
+
+            base.Update(tarefa);
         }
+
     }
 };
